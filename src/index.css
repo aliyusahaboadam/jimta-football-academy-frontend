@@ -1,0 +1,97 @@
+:root {
+    --color-primary: #0e387a;
+    --color-secondary: #9fafca;
+    --color-headings:#0a2859;
+    --color-body: #9a99ac;
+    --color-body-darker: #918ca4;
+    --color-accent: #ff2a00;
+    --color-secondary-text: #12ABA5;
+    --color-border: #ccc; 
+    --border-radius: 30px;
+ }
+
+
+body {
+     font-family: 'Roboto', sans-serif;
+     color: var(--color-body);
+     font-size: 2.4rem;
+     line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+     margin: 0;
+  }
+
+  /*Typography*/
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+
+  h1, h2, h3 {
+    color: var(--color-headings);
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+  
+  h1 {
+   font-size: 7rem;
+  }
+  
+  h2 {
+   font-size: 4rem;
+  }
+  
+  h3 {
+   font-size: 3rem;
+   font-weight: 500;
+  }
+  
+  p {
+   margin-top: 0;
+  }
+  
+  @media screen and (min-width: 1024px) {
+  
+   body {
+       font-size: 1.8rem;
+   }
+  
+   h1 {
+       font-size: 8rem;
+   }
+  
+   h2 {
+       font-size: 4rem;
+   }
+  
+   h3 {
+       font-size: 2.4rem;
+   }
+  }
+  
+  
+   
+ *,
+ *::after, 
+ *::before {
+     box-sizing: border-box;
+ }
+ 
+ 
+ ::selection {
+     background: var(--color-primary);
+     color: #ccc;
+ }
+ 
+ html{
+     /*Initialy is 16px: 16px X 62.5% = 10px there 1rem equivalent to 10px*/
+      /*since 1rem means 1x(font size of the html element)*/
+     font-size: 62.5%;
+ }
+
+
+
+
+ 
+  
