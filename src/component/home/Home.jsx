@@ -138,9 +138,8 @@ const GALLERY_IMAGES = [
 ];
 
 const FOOTER_PROGRAMS = [
-  'Junior Academy (Ages 6-12)',
-  'Youth Development (Ages 13-17)',
-  'Elite Pathway (18+)',
+  'Junior Academy',
+  'Elite Pathway',
   'Girls Football Program',
   'Goalkeeping Clinic',
   'Holiday Football Camps',
