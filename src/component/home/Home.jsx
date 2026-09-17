@@ -484,7 +484,7 @@ export default function Home() {
             <section className={cx('footer__brand')}>
               <img src="/images/jimta_home_logo.png" alt="Jimta Football Academy logo" />
               <p className={cx('footer__copyright')}>
-                Copyright 2026 Jimta Football Academy, All Rights Reserved.
+                Copyright 2026 Jimta, All Rights Reserved.
               </p>
             </section>
           </div>
