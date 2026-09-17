@@ -406,7 +406,7 @@ export default function Home() {
           <div className={cx('container', 'grid', 'footer__sections')}>
             <section className={cx('collapsible', openFooterSections.programs && 'collapsible--expanded', 'footer__section')}>
               <header className={cx('collapsible__header')} onClick={() => toggleFooterSection('programs')}>
-                <h2 className={cx('collapsible__heading', 'footer__heading')}>Our Programs</h2>
+                <h2 className={cx('collapsible__heading', 'footer__heading')}>Programs</h2>
                 <span className={cx('icon-container')}>
                   <svg className={cx('icon', 'icon--primary', 'icon--white', 'collapsible--chevron')}>
                     <use xlinkHref="/images/sprite.svg#chevron"></use>
@@ -425,7 +425,7 @@ export default function Home() {
 
             <section className={cx('collapsible', openFooterSections.media && 'collapsible--expanded', 'footer__section')}>
               <header className={cx('collapsible__header')} onClick={() => toggleFooterSection('media')}>
-                <h2 className={cx('collapsible__heading', 'footer__heading')}>Media Platform</h2>
+                <h2 className={cx('collapsible__heading', 'footer__heading')}>Media</h2>
                 <span className={cx('icon-container')}>
                   <svg className={cx('icon', 'icon--primary', 'icon--white', 'collapsible--chevron')}>
                     <use xlinkHref="/images/sprite.svg#chevron"></use>
@@ -475,16 +475,16 @@ export default function Home() {
 
               <div className={cx('collapsible__content')}>
                 <p>Address: Jimeta-Yola, Adamawa State, Nigeria.</p>
-                <p>Tel: +234(0) 8036502423</p>
-                <p>Mail: jimtafootballacademy@gmail.com</p>
-                <p>WhatsApp: +234(0) 8036502423</p>
+                <p>Tel: +2348036502423</p>
+                {/* <p>Mail: jimtafootballacademy@gmail.com</p> */}
+                <p>WhatsApp: +2348036502423</p>
               </div>
             </section>
 
             <section className={cx('footer__brand')}>
               <img src="/images/jimta_home_logo.png" alt="Jimta Football Academy logo" />
               <p className={cx('footer__copyright')}>
-                Copyright 2026 Jimta, All Rights Reserved.
+                Copyright 2026 Jimta Football Academy, All Rights Reserved.
               </p>
             </section>
           </div>
