@@ -1,0 +1,964 @@
+:root {
+    --color-primary: #0e387a;
+    --color-primary-dark: #b8152f;
+    --color-secondary: #3D52A0;
+    --color-headings: #d71b3b;
+    --color-body: #9a99ac;
+    --color-body-darker: #918ca4;
+    --color-accent: #ff2a00;
+    --color-secondary-text: #12ABA5;
+    --color-border: #ccc;
+    /* --color-page-bg: #EDE8F5; */
+    --color-surface-tint: #f4f1fa;
+    --border-radius: 30px;
+}
+
+body {
+    background-color: var(--color-page-bg);
+}
+
+h1, h2, h3 {
+    color: var(--color-headings);
+    margin-bottom: 1rem;
+    line-height: 1.1;
+}
+
+h1 { font-size: 7rem; }
+h2 { font-size: 4rem; }
+h3 { font-size: 3rem; font-weight: 500; }
+
+p { margin-top: 0; }
+
+@media screen and (min-width: 1024px) {
+    body { font-size: 1.8rem; }
+    h1 { font-size: 8rem; }
+    h2 { font-size: 4rem; }
+    h3 { font-size: 2.4rem; }
+}
+
+/* Layout */
+
+.secondary--container {
+    padding: 0 1rem 0 1rem;
+    margin: 0 auto;
+    padding-top: 1rem;
+    background-color: var(--color-page-bg);
+    min-height: 100vh;
+}
+
+/* Links */
+
+a { text-decoration: none; }
+
+.link--profile {
+    font-size: 1.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: #b8152f;
+}
+
+.link--drawer {
+    font-size: 1.7rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: 3.5rem;
+    color: #d71b3b;
+}
+
+.link--drawer:hover {
+    opacity: 0.8;
+}
+
+.link--drawer:active {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+/* Badges */
+
+.badge {
+    border-radius: 20px;
+    padding: 0.5rem 2rem;
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 2rem;
+}
+
+.card--count .badge {
+    background: var(--color-surface-tint);
+    border-radius: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 4rem;
+    color: var(--color-primary);
+}
+
+.badge--primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.badge--secondary {
+    background: var(--color-secondary);
+    color: #fff;
+}
+
+.badge--small {
+    font-size: 1.6rem;
+    padding: 0.5rem 1.5rem;
+}
+
+@media screen and (min-width: 1024px) {
+    .badge { font-size: 1.5rem; }
+    .badge--small { font-size: 1.2rem; }
+}
+
+/* Icons */
+
+.icon {
+    width: 40px;
+    height: 40px;
+}
+
+.icon--big {
+    width: 70px;
+    height: 70px;
+}
+
+.icon--small {
+    width: 30px;
+    height: 30px;
+}
+
+.icon--primary {
+    fill: #0e387a;
+}
+
+.icon--secondary {
+    fill: var(--color-secondary);
+}
+
+.icon--white {
+    fill: #fff;
+}
+
+.icon--error { fill: #F44336; }
+.icon--success { fill: #388E3C; }
+
+.icon-container {
+    background: var(--color-surface-tint);
+    width: 64px;
+    height: 64px;
+    border-radius: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.collapsible__header .icon-container {
+    background: var(--color-primary);
+    width: 20px;
+    height: 20px;
+}
+
+/* Buttons */
+
+.btn {
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 2rem 4vw;
+    border: 0;
+    text-align: center;
+    border-radius: 40px;
+    cursor: pointer;
+    white-space: nowrap;
+    margin: 1rem 0;
+}
+
+.btn--primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.btn--primary:hover {
+    background: var(--color-primary-dark);
+}
+
+.btn--secondary {
+    background: var(--color-secondary);
+    color: #fff;
+}
+
+.btn--secondary:hover {
+    background: #33468c;
+}
+
+.btn--accent {
+    background: var(--color-accent);
+    color: #fff;
+}
+
+.btn--accent:hover {
+    background: #ee2902;
+}
+
+.btn--outline {
+    background: #fff;
+    color: var(--color-primary);
+    border: 2px solid var(--color-headings);
+}
+
+.btn--outline:hover {
+    background: var(--color-headings);
+    color: #fff;
+}
+
+.btn--block {
+    width: 100%;
+    display: inline-block;
+}
+
+@media screen and (min-width: 1024px) {
+    .btn { font-size: 1.5rem; }
+}
+
+/* Cards */
+
+.card {
+    border-radius: 7px;
+    box-shadow: 0 0 20px 10px var(--color-surface-tint);
+    overflow: hidden;
+}
+
+.card_header, .card_body, .card_footer {
+    padding: 1rem 1rem;
+}
+
+.card_body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+}
+
+.card_footer {
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+    display: block;
+}
+
+.card_button_and_icon {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.card--count {
+    border-radius: 7px;
+    box-shadow: 0 0 2px 2px var(--color-surface-tint);
+    overflow: hidden;
+}
+
+.card--count .card_body {
+    text-align: center;
+    text-transform: capitalize;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.card--count .card--small-head {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    width: 100%;
+    text-transform: uppercase;
+}
+
+.card--primary .card_header {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.card--primary .card_footer {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.card--primary .card_footer:hover {
+    background: var(--color-surface-tint);
+    color: var(--color-primary);
+}
+
+.card--secondary .card_header {
+    background: var(--color-secondary);
+    color: #fff;
+}
+
+.card--secondary .card_footer {
+    background: var(--color-secondary);
+    color: #fff;
+}
+
+.card--secondary .card_footer:hover {
+    background: var(--color-surface-tint);
+    color: var(--color-secondary);
+}
+
+.card--alert-error {
+    border-radius: 7px;
+    box-shadow: 0 0 2px 2px var(--color-surface-tint);
+    overflow: hidden;
+}
+
+.card--alert-success {
+    border-radius: 7px;
+    box-shadow: 0 0 20px 10px var(--color-surface-tint);
+    overflow: hidden;
+}
+
+.card--alert-error .card_footer {
+    background: var(--color-surface-tint);
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+    display: block;
+    color: #F44336;
+    text-transform: uppercase;
+}
+
+.card--alert-success .card_footer {
+    background: var(--color-surface-tint);
+    text-align: center;
+    font-weight: 400;
+    font-size: 1rem;
+    display: block;
+    color: #388E3C;
+    text-transform: uppercase;
+}
+
+.alert-message {
+    margin-top: 1rem;
+}
+
+.alert-close {
+    align-self: end;
+}
+
+/* Grids */
+
+.grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+@media screen and (min-width: 769px) {
+    .grid--1x2 { grid-template-columns: repeat(2, 1fr); }
+    .grid--1x3 { grid-template-columns: repeat(3, 1fr); }
+    .grid--1x4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media screen and (min-width: 1024px) {
+    .grid--1x3 { grid-template-columns: repeat(3, 1fr); }
+    .grid--1x4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Collapsible (drawer nav sections) */
+
+.collapsible {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.collapsible__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 2px 2px var(--color-surface-tint);
+    border-radius: 8px;
+    padding: 0 1rem;
+    margin: 0.2rem 0.6rem;
+}
+
+.collapsible__header:hover {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+.collapsible__header:hover .collapsible__heading {
+    color: #fff;
+}
+
+.collapsible__header:hover .icon--primary {
+    fill: #fff;
+}
+
+.collapsible__heading {
+    font-size: 2rem;
+    color: #0e387a;
+    font-weight: 500;
+    margin: 0 0 0 0.5rem;
+}
+
+.collapsible--chevron {
+    transform: rotate(-90deg);
+    transition: transform 0.3s;
+}
+
+.collapsible__content--drawer {
+    display: flex;
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.7s;
+    opacity: 0;
+    padding: 0;
+}
+
+.collapsible--icon {
+    width: 22px;
+    height: 22px;
+}
+
+.collapsible__icon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.collapsible--expanded .collapsible--chevron {
+    transform: rotate(0);
+}
+
+.collapsible--expanded .collapsible__content--drawer {
+    max-height: 100vh;
+    opacity: 1;
+}
+
+/* Navbar / brand */
+
+.logo__link > img {
+    height: 60px;
+    object-fit: cover;
+    padding-top: 0.5rem;
+}
+
+.logo {
+    margin-right: 2rem;
+}
+
+/* Profile popup */
+
+.profile--selection__container {
+    width: max-content;
+    height: max-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 5px;
+    margin-top: 1rem;
+    color: var(--color-headings);
+    border-radius: 8px;
+    box-shadow: 0 0 20px 10px var(--color-surface-tint);
+    z-index: 1000;
+    background: white;
+}
+
+.profile, .logout {
+    padding: 5px 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.profile:hover, .logout:hover {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+/* ============================================================
+   Jimta — table-page "Add" card + small heading (ViewPlayers etc.)
+   ============================================================ */
+
+.card--add {
+  border-radius: 7px;
+  box-shadow: 0 0 2px 2px var(--color-surface-tint);
+  overflow: hidden;
+}
+
+.card--small-head {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  width: 100%;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+
+/* ============================================================
+   Jimta — Player Gallery (and reusable card grids)
+   ============================================================ */
+
+.gallery__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.4rem;
+}
+
+.gallery__title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.gallery__subtitle {
+  font-size: 1.4rem;
+  color: var(--color-body);
+  margin: 0.2rem 0 0;
+}
+
+.gallery__filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.gallery__input,
+.gallery__select {
+  font-family: inherit;
+  font-size: 1.4rem;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--color-body-darker);
+  min-width: 180px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery__input:focus,
+.gallery__select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(215, 27, 59, 0.15);
+}
+
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+  padding-bottom: 3rem;
+}
+
+.gallery__card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(14, 56, 122, 0.08);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gallery__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(14, 56, 122, 0.16);
+}
+
+.gallery__imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--color-surface-tint);
+  overflow: hidden;
+}
+
+.gallery__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.gallery__card:hover .gallery__image {
+  transform: scale(1.06);
+}
+
+.gallery__badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.3rem;
+  padding: 0.4rem 1rem;
+}
+
+.gallery__body {
+  padding: 1.4rem 1.6rem 1.6rem;
+}
+
+.gallery__name {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--color-body-darker);
+  margin: 0 0 0.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gallery__position {
+  font-size: 1.3rem;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin: 0 0 0.2rem;
+}
+
+.gallery__team {
+  font-size: 1.3rem;
+  color: var(--color-body);
+  margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .gallery__grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.4rem;
+  }
+
+  .gallery__input,
+  .gallery__select {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .gallery__filters {
+    width: 100%;
+  }
+}
+
+
+/* ============================================================
+   Jimta — Teams By Age Group + reusable team cards
+   ============================================================ */
+
+.agegroup__section {
+  margin-bottom: 3.2rem;
+}
+
+.agegroup__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.6rem;
+}
+
+.agegroup__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.team__card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(14, 56, 122, 0.08);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  padding: 2rem;
+  border-left: 4px solid var(--color-primary);
+}
+
+.team__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(14, 56, 122, 0.14);
+}
+
+.team__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.team__name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-body-darker);
+  margin: 0;
+}
+
+.team__division {
+  font-size: 1.3rem;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.team__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.team__metaItem {
+  font-size: 1.3rem;
+  color: var(--color-body);
+}
+
+
+/* ============================================================
+   Jimta — Status filter chips (MatchesByStatus)
+   ============================================================ */
+
+.status__chips {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.status__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 0.8rem 1.6rem;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-body-darker);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.status__chip:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.status__chip--active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.status__chipCount {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 0.1rem 0.8rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
+}
+
+.status__chip:not(.status__chip--active) .status__chipCount {
+  background: var(--color-surface-tint);
+  color: var(--color-primary);
+}
+
+
+/* ============================================================
+   Jimta — Match cards (PerformanceByMatch)
+   ============================================================ */
+
+.match__card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(14, 56, 122, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.match__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(14, 56, 122, 0.14);
+}
+
+.match__card--primary {
+  border-top: 4px solid #d71b3b;
+}
+
+.match__card--secondary {
+  border-top: 4px solid #3D52A0;
+}
+
+.match__body {
+  padding: 1.8rem 1.6rem 1.2rem;
+}
+
+.match__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.match__title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--color-body-darker);
+  margin: 0 0 0.6rem;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.match__vs {
+  color: #d71b3b;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 1.4rem;
+  padding: 0 0.3rem;
+}
+
+.match__meta {
+  font-size: 1.3rem;
+  color: var(--color-body);
+  text-align: center;
+  margin: 0;
+}
+
+.match__footer {
+  display: flex;
+  gap: 0.6rem;
+  padding: 1rem 1.6rem 1.6rem;
+}
+
+.match__footer .btn {
+  flex: 1;
+  font-size: 1.3rem;
+  padding: 0.9rem 0.6rem;
+  margin: 0;
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+
+
+/* ============================================================
+   Jimta — Admin Profile detail view
+   ============================================================ */
+
+.card--details__wrapper {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(14, 56, 122, 0.08);
+  padding: 2.4rem;
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.card--details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 1.5rem;
+  color: var(--color-body-darker);
+}
+
+.card--details span {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.card--details:last-of-type {
+  border-bottom: none;
+}
+
+.card--details__wrapper .container__brand {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.card--details__wrapper .container__brand img {
+  height: 50px;
+  object-fit: contain;
+}
+
+
+
+/* ============================================================
+   Jimta — Dashboard charts section
+   ============================================================ */
+
+.chart__wrapper {
+  margin-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.chart__heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 1.6rem;
+  text-align: center;
+}
+
+.chart__card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(14, 56, 122, 0.08);
+  padding: 1.6rem 1rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart__title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--color-body-darker);
+  margin: 0 0 0.5rem;
+  font-style: italic;
+}
+
+.chart__total {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.chart__total p {
+  margin: 0;
+}

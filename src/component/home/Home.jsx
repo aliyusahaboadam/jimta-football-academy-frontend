@@ -19,11 +19,14 @@ function cx(...classes) {
 // ---------------------------------------------------------------------------
 
 const NAV_LINKS = [
-  { href: '#home', label: 'Home' },
-  { href: '#programs', label: 'Programs' },
+     { href: '/login', label: 'Player' },
+    { href: '/login-coach', label: 'Coach' },
+     { href: '/login-admin', label: 'Admin' },
+  
   { href: '#why-us', label: 'About Us' },
   { href: '#gallery', label: 'Gallery' },
   { href: '#contact', label: 'Contact' },
+{ href: '#home', label: 'Home' },
 ];
 
 const STATS = [

@@ -1,0 +1,337 @@
+/* @import "bootstrap/dist/css/bootstrap.min.css"; */
+:root {
+     --color-primary: #d71b3b;
+   --color-secondary: #3D52A0;
+   --color-headings:#d71b3b;
+   --color-body: #9a99ac;
+   --color-body-darker: #918ca4;
+   --color-accent: #ff2a00;
+   --color-secondary-text: #12ABA5;
+   --color-border: #ccc; 
+   --border-radius: 30px;
+ }
+
+.form-page {
+  background-color: #d71b3b;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 800'%3E%3Cg%3E%3Ccircle fill='%23d71b3b' cx='400' cy='400' r='600'/%3E%3Ccircle fill='%23c01735' cx='400' cy='400' r='500'/%3E%3Ccircle fill='%23a9132f' cx='400' cy='400' r='400'/%3E%3Ccircle fill='%23910f29' cx='400' cy='400' r='300'/%3E%3Ccircle fill='%23780b23' cx='400' cy='400' r='200'/%3E%3Ccircle fill='%235f071d' cx='400' cy='400' r='100'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 3rem 1rem;
+}
+ 
+ .btn {
+   font-family: 'Roboto', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    padding: 1rem 3rem ;
+    border: 0;
+    text-align: center;
+    border-radius: 7px;
+    cursor: pointer;
+    white-space: nowrap;
+    margin: 1rem 0;
+ }
+ .btn--block {
+  width: 100%;
+  display: inline-block;
+
+}
+ .btn--primary {
+    background: var(--color-primary);
+    color:#fff
+ }
+
+ .btn--primary:hover {
+  background: #c11734;
+}
+ 
+ .btn {
+    width: 100%;
+    display: inline-block;
+ 
+ }
+ 
+ /*Forms*/
+  
+ .form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+  .container__brand > img {
+    height: 50px;
+    object-fit: cover;
+  }
+  
+  .form { 
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin:  4rem 3rem 4rem 3rem;
+    width: 100%;
+
+  }
+
+  .form > h3 {
+    text-align: center;
+    margin: 1.2rem;
+    
+  }
+ 
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-header {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    width: 100%;
+    margin: 0;
+  }
+ 
+  label {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-headings);
+    font-size: 1.8rem;
+    /* font-size: 1.8rem; */
+    
+  }
+
+ 
+  ::placeholder {
+    color: #cbcdd7;
+   
+ }
+
+ @media screen and (min-width: 480px) {
+  .form > h3 {
+      font-size: 2.5rem;
+  }
+
+  .form {
+    max-width: 400px;
+  }
+}
+ 
+   /*Link*/
+   a{
+    text-decoration: none;
+   }  
+
+   .link_span {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+   }
+  
+   .link__register {
+    font-size: 1.5rem;
+    color: var(--color-body-darker);
+    font-weight: 600;
+  }
+   
+
+
+  .link__register:hover{
+    opacity: 0.7;
+   }
+ 
+  /*Input*/
+  input {
+    width: 100%;
+    font-family: 'Roboto', sans-serif; 
+    font-weight: 400;
+    font-size: 2rem;
+    padding: 1rem 2rem;
+    border: none;
+    outline: 0;
+    color: var(--color-headings);
+    border-radius: var(--border-radius);
+  }
+  
+  ::placeholder {
+    color: #cbcdd7;
+  }
+  
+  .input-group {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .password-icon {
+    margin-right: 10px;
+    cursor: pointer;
+    
+   }
+ 
+ .input-group .input {
+    border: 0;
+    flex-grow: 1;
+    padding: 1.5rem 2rem;
+    width: 0;
+ }
+ 
+ .input-group .btn {
+    margin: 4px;
+ }
+
+ .error {
+  color: #F7C816;
+  font-size: 1.5rem;
+ }
+
+ 
+ @media screen and (min-width: 1024px) {
+    .input {
+        font-size: 1.5rem;
+    }
+ }
+
+ .span-login-secondary {
+  background: #fff;
+  color: var(--color-primary);
+  border: 2px solid var(--color-headings);
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.8rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 400;
+  padding: 1rem 1.5rem;
+ }
+
+
+ /*Footer*/
+ 
+
+ .footer__brand > img {
+  height: 60px;
+  object-fit: cover;
+  background: white;
+  border-radius: 5px;
+  
+}
+
+.footer__brand {
+  width: 100%;
+  text-align: center;
+  margin-top: 10vh;
+  position: relative;
+  bottom: 0;
+ 
+}
+
+
+
+.footer__copyright {
+  font-size: 2.1rem;
+  color: #ccc;
+  opacity: .3;
+}
+
+
+
+@media screen and (min-width: 768px) {
+ 
+  .footer__copyright {
+      font-size: 1.5rem;
+  }
+
+}
+
+/*User Type*/
+
+.user-type--container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-type {
+  display: inline-block;
+  background: #fff;
+  color: var(--color-primary);
+  border: 2px solid var(--color-headings);
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.8rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 400;
+  padding: 0.8rem 1.5rem;
+  margin-right: 10px;
+}
+
+
+/*form info*/
+
+.form-link--container {
+  justify-content: flex-start;
+ 
+}
+.form-link {
+ display: block;
+ font-size: 1.5rem;
+}
+
+.form-link > a {
+  color: var(--color-headings)
+}
+
+
+/* ============================================================
+   Jimta — form section headings (AddPlayer, AddCoach, etc.)
+   ============================================================ */
+.form-section {
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-primary);
+  margin: 2rem 0 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  width: 100%;
+}
+
+
+/* ============================================================
+   Jimta — extra form-shell classes used by Add/Edit pages
+   ============================================================ */
+.logo__link {
+  display: inline-block;
+}
+
+.logo {
+  margin-right: 0;
+}
+
+
+.form-section {
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-primary);
+  margin: 2rem 0 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  width: 100%;
+}

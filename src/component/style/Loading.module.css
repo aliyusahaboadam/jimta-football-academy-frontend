@@ -1,0 +1,37 @@
+.root {
+    height: 100%;  /* Ensures the background covers the entire viewport */
+    background-color: var(--color-headings); /* Change to any color you want */
+    display: flex;
+    justify-items: center;
+    align-items: center;
+  }
+
+
+  .svg {
+    display: block; /* Ensures it behaves like a block element */
+    margin: auto; /* Centers horizontally */
+    position: absolute; /* Enables precise positioning */
+    top: 50%; /* Moves it down by 50% of the viewport height */
+    left: 50%; /* Moves it right by 50% of the viewport width */
+    transform: translate(-50%, -50%); /* Adjusts position back to exact center */
+    width: 200px; /* Adjust size */
+    height: auto; /* Keeps aspect ratio */
+  }
+
+  .loading-image {
+    object-fit: contain;
+    width: 80px;
+    height: 80px;
+  }
+
+ 
+
+
+  .loading-container {
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  
