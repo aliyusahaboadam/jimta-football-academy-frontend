@@ -10,11 +10,10 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAuthenticatedCoach } from "../../redux/reducer/coachSlice";
-import { getPlayersByTeamId } from "../../redux/reducer/playerSlice";
-import { getTeamsByCoachId } from "../../redux/reducer/teamSlice";
+import { deleteTrainingAsCoach, getTrainingsForCoach } from "../../redux/reducer/trainingSlice";
 import Loading from "../Chunks/loading";
 import dashboard from "../style/Dashboard.module.css";
+import TrainingActionMenu from "../utility/TrainingActionMenu";
 
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
@@ -27,9 +26,7 @@ import React from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#d71b3b",
-    color: theme.palette.common.white,
-    fontSize: 18,
+    backgroundColor: "#d71b3b", color: theme.palette.common.white, fontSize: 18,
   },
   [`&.${tableCellClasses.body}`]: { fontSize: 18 },
 }));
@@ -39,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": { border: 0 },
 }));
 
-const CoachMyPlayers = () => {
+const CoachTrainings = () => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -55,27 +52,15 @@ const CoachMyPlayers = () => {
   const idProfile = openProfile ? "simple-popper" : undefined;
   const handleClickAway = () => setAnchorProfile(null);
 
-  const playerState = useSelector((state) => state.players);
-  const { players, fetchingStatus } = playerState;
-  const playerList = Array.isArray(players) ? players : [];
+  const trainingState = useSelector((state) => state.trainings);
+  const { trainings, fetchingStatus } = trainingState;
+  const rows = Array.isArray(trainings) ? trainings : [];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        const coachRes = await dispatch(getAuthenticatedCoach()).unwrap();
-        if (coachRes?.id) {
-          const teamRes = await dispatch(getTeamsByCoachId(coachRes.id)).unwrap();
-          const firstTeam = Array.isArray(teamRes) ? teamRes[0] : null;
-          if (firstTeam?.id) dispatch(getPlayersByTeamId(firstTeam.id));
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetch();
+    dispatch(getTrainingsForCoach());
   }, [dispatch]);
 
   const logout = () => {
@@ -84,10 +69,18 @@ const CoachMyPlayers = () => {
     localStorage.setItem("authenticated", JSON.stringify(false));
   };
 
-  const playerName = (p) =>
-    [p?.firstname, p?.surname, p?.lastname].filter(Boolean).join(" ") ||
-    p?.profile?.firstname ||
-    "—";
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteTrainingAsCoach(id)).unwrap();
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  };
+
+  const handleEdit = (id) => navigate(`/coach/trainings/update/${id}`);
+  const handleViewDetails = (id) => navigate(`/coach/trainings/details/${id}`);
+
+  const timeRange = (t) => t.endTime ? `${t.startTime} – ${t.endTime}` : t.startTime;
 
   return (
     <>
@@ -106,26 +99,17 @@ const CoachMyPlayers = () => {
                   </IconButton>
                 )}
                 <div>
-                  <IconButton
-                    onClick={profilePopup}
-                    sx={{
-                      backgroundColor: "#d71b3b",
-                      "&:hover": { backgroundColor: "#b8152f" },
-                    }}
-                  >
+                  <IconButton onClick={profilePopup}
+                    sx={{ backgroundColor: "#d71b3b", "&:hover": { backgroundColor: "#b8152f" } }}>
                     <PersonOutlineOutlinedIcon sx={{ color: "white", fontSize: 25 }} />
                   </IconButton>
                   <BasePopup sx={{ zIndex: 2 }} id={idProfile} open={openProfile} anchor={anchorProfile}>
                     <div className={dashboard["profile--selection__container"]}>
                       <div className={dashboard["profile"]}>
-                        <a href="/coach/profile" className={dashboard["link--profile"]}>
-                          Profile
-                        </a>
+                        <a href="/coach/profile" className={dashboard["link--profile"]}>Profile</a>
                       </div>
                       <div className={dashboard["logout"]}>
-                        <a onClick={logout} className={dashboard["link--profile"]}>
-                          Logout
-                        </a>
+                        <a onClick={logout} className={dashboard["link--profile"]}>Logout</a>
                       </div>
                     </div>
                   </BasePopup>
@@ -138,21 +122,12 @@ const CoachMyPlayers = () => {
               open={isLargeScreen || isDrawerOpen}
               onClose={!isLargeScreen ? toggleDrawer : undefined}
               sx={{
-                width: 240,
-                flexShrink: 0,
+                width: 240, flexShrink: 0,
                 "& .MuiDrawer-paper": { width: 240, boxSizing: "border-box" },
                 "& .MuiBackdrop-root": { backgroundColor: "rgba(215, 27, 59, 0.15)" },
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  p: 2,
-                  borderBottom: "1px solid #ddd",
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2, borderBottom: "1px solid #ddd" }}>
                 <Box sx={{ textAlign: "center", flexGrow: 1 }}>
                   <a className={[dashboard["logo__link"], dashboard["logo"]].join(" ")} href="#">
                     <img src="/images/jimta_home_logo.png" alt="Jimta logo" />
@@ -164,7 +139,6 @@ const CoachMyPlayers = () => {
                   </IconButton>
                 )}
               </Box>
-
                 <List>
                              {/* Dashboard */}
                              <div
@@ -395,58 +369,59 @@ const CoachMyPlayers = () => {
                            </List>
             </Drawer>
 
-            <Box
-              component="main"
+            <Box component="main"
               sx={{
-                flexGrow: 1,
-                marginTop: 8,
-                fontSize: 18,
-                overflowX: "auto",
-                width: "100%",
-                color: "#9a99ac",
-                transition: "margin-left 0.3s ease-in-out",
+                flexGrow: 1, marginTop: 8, fontSize: 18, overflowX: "auto",
+                width: "100%", color: "#9a99ac", transition: "margin-left 0.3s ease-in-out",
               }}
             >
               <div className={dashboard["secondary--container"]}>
                 <div className={[dashboard["card--add"], dashboard["card--primary"]].join(" ")}>
                   <div className={dashboard["card_body"]}>
-                    <div className={dashboard["card--small-head"]}>My Players</div>
-                    <p style={{ fontSize: 14, margin: 0, color: "#9a99ac" }}>
-                      {playerList.length} {playerList.length === 1 ? "player" : "players"}
-                    </p>
+                    <div className={dashboard["card--small-head"]}>My Trainings</div>
+                    <button onClick={() => navigate("/coach/trainings/add")}
+                      className={[dashboard["btn"], dashboard["btn--block"], dashboard["btn--primary"]].join(" ")}>
+                      + Add Training
+                    </button>
                   </div>
                 </div>
 
                 <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-                  <Table sx={{ minWidth: 650 }} aria-label="my players table">
+                  <Table sx={{ minWidth: 700 }} aria-label="coach trainings table">
                     <TableHead>
                       <TableRow>
                         <StyledTableCell align="left">S/N</StyledTableCell>
-                        <StyledTableCell align="left">Name</StyledTableCell>
-                        <StyledTableCell align="left">Position</StyledTableCell>
-                        <StyledTableCell align="left">Jersey</StyledTableCell>
-                        <StyledTableCell align="left">Nationality</StyledTableCell>
+                        <StyledTableCell align="left">Title</StyledTableCell>
+                        <StyledTableCell align="left">Team</StyledTableCell>
+                        <StyledTableCell align="left">Date</StyledTableCell>
+                        <StyledTableCell align="left">Time</StyledTableCell>
+                        <StyledTableCell align="left">Venue</StyledTableCell>
+                        <StyledTableCell align="right">Action</StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {playerList.length === 0 ? (
+                      {rows.length === 0 ? (
                         <StyledTableRow>
-                          <StyledTableCell colSpan={5} align="center">
-                            No players on your team yet.
-                          </StyledTableCell>
+                          <StyledTableCell colSpan={7} align="center">No trainings yet.</StyledTableCell>
                         </StyledTableRow>
                       ) : (
-                        playerList.map((row, index) => (
+                        rows.map((row, index) => (
                           <StyledTableRow key={row.id}>
-                            <StyledTableCell component="th" scope="row">
-                              {index + 1}
+                            <StyledTableCell component="th" scope="row">{index + 1}</StyledTableCell>
+                            <StyledTableCell align="left">{row.title || "—"}</StyledTableCell>
+                            <StyledTableCell align="left">{row.teamName || "—"}</StyledTableCell>
+                            <StyledTableCell align="left">{row.trainingDate || "—"}</StyledTableCell>
+                            <StyledTableCell align="left">{timeRange(row)}</StyledTableCell>
+                            <StyledTableCell align="left">{row.venue || "—"}</StyledTableCell>
+                            <StyledTableCell align="right">
+                              <TrainingActionMenu
+                                row={row}
+                                onDelete={handleDelete}
+                                onEdit={handleEdit}
+                                onView={handleViewDetails}
+                                mode="coach"
+                              />
                             </StyledTableCell>
-                            <StyledTableCell align="left">{playerName(row)}</StyledTableCell>
-                            <StyledTableCell align="left">{row.position || "—"}</StyledTableCell>
-                            <StyledTableCell align="left">
-                              {row.jerseyNumber ?? "—"}
-                            </StyledTableCell>
-                            <StyledTableCell align="left">{row.nationality || "—"}</StyledTableCell>
                           </StyledTableRow>
                         ))
                       )}
@@ -462,4 +437,4 @@ const CoachMyPlayers = () => {
   );
 };
 
-export default CoachMyPlayers;
+export default CoachTrainings;

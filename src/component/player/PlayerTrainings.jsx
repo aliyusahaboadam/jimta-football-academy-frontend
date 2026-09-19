@@ -10,9 +10,8 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAuthenticatedCoach } from "../../redux/reducer/coachSlice";
-import { getMatchesByTeamId } from "../../redux/reducer/matchSlice";
-import { getTeamsByCoachId } from "../../redux/reducer/teamSlice";
+import { getAuthenticatedPlayer } from "../../redux/reducer/playerSlice";
+import { getTrainingsByTeamId } from "../../redux/reducer/trainingSlice";
 import Loading from "../Chunks/loading";
 import dashboard from "../style/Dashboard.module.css";
 
@@ -27,9 +26,7 @@ import React from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#d71b3b",
-    color: theme.palette.common.white,
-    fontSize: 18,
+    backgroundColor: "#d71b3b", color: theme.palette.common.white, fontSize: 18,
   },
   [`&.${tableCellClasses.body}`]: { fontSize: 18 },
 }));
@@ -39,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": { border: 0 },
 }));
 
-const CoachUpcomingMatches = () => {
+const PlayerTrainings = () => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -55,9 +52,9 @@ const CoachUpcomingMatches = () => {
   const idProfile = openProfile ? "simple-popper" : undefined;
   const handleClickAway = () => setAnchorProfile(null);
 
-  const matchState = useSelector((state) => state.matches);
-  const { matches, fetchingStatus } = matchState;
-  const matchList = Array.isArray(matches) ? matches : [];
+  const trainingState = useSelector((state) => state.trainings);
+  const { trainings, fetchingStatus } = trainingState;
+  const rows = Array.isArray(trainings) ? trainings : [];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -65,12 +62,9 @@ const CoachUpcomingMatches = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const coachRes = await dispatch(getAuthenticatedCoach()).unwrap();
-        if (coachRes?.id) {
-          const teamRes = await dispatch(getTeamsByCoachId(coachRes.id)).unwrap();
-          const firstTeam = Array.isArray(teamRes) ? teamRes[0] : null;
-          if (firstTeam?.id) dispatch(getMatchesByTeamId(firstTeam.id));
-        }
+        const res = await dispatch(getAuthenticatedPlayer()).unwrap();
+        const teamId = res?.teamId ?? res?.team?.id;
+        if (teamId) dispatch(getTrainingsByTeamId(teamId));
       } catch (err) {
         console.error(err);
       }
@@ -84,12 +78,7 @@ const CoachUpcomingMatches = () => {
     localStorage.setItem("authenticated", JSON.stringify(false));
   };
 
-  const upcoming = matchList.filter(
-    (m) => (m.status || "").toUpperCase() === "SCHEDULED"
-  );
-
-  const homeName = (m) => m.homeTeamName || m.homeTeam?.name || "Home";
-  const awayName = (m) => m.awayTeamName || m.awayTeam?.name || "Away";
+  const timeRange = (t) => t.endTime ? `${t.startTime} – ${t.endTime}` : t.startTime;
 
   return (
     <>
@@ -108,26 +97,17 @@ const CoachUpcomingMatches = () => {
                   </IconButton>
                 )}
                 <div>
-                  <IconButton
-                    onClick={profilePopup}
-                    sx={{
-                      backgroundColor: "#d71b3b",
-                      "&:hover": { backgroundColor: "#b8152f" },
-                    }}
-                  >
+                  <IconButton onClick={profilePopup}
+                    sx={{ backgroundColor: "#d71b3b", "&:hover": { backgroundColor: "#b8152f" } }}>
                     <PersonOutlineOutlinedIcon sx={{ color: "white", fontSize: 25 }} />
                   </IconButton>
                   <BasePopup sx={{ zIndex: 2 }} id={idProfile} open={openProfile} anchor={anchorProfile}>
                     <div className={dashboard["profile--selection__container"]}>
                       <div className={dashboard["profile"]}>
-                        <a href="/coach/profile" className={dashboard["link--profile"]}>
-                          Profile
-                        </a>
+                        <a href="/player/profile" className={dashboard["link--profile"]}>Profile</a>
                       </div>
                       <div className={dashboard["logout"]}>
-                        <a onClick={logout} className={dashboard["link--profile"]}>
-                          Logout
-                        </a>
+                        <a onClick={logout} className={dashboard["link--profile"]}>Logout</a>
                       </div>
                     </div>
                   </BasePopup>
@@ -140,21 +120,12 @@ const CoachUpcomingMatches = () => {
               open={isLargeScreen || isDrawerOpen}
               onClose={!isLargeScreen ? toggleDrawer : undefined}
               sx={{
-                width: 240,
-                flexShrink: 0,
+                width: 240, flexShrink: 0,
                 "& .MuiDrawer-paper": { width: 240, boxSizing: "border-box" },
                 "& .MuiBackdrop-root": { backgroundColor: "rgba(215, 27, 59, 0.15)" },
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  p: 2,
-                  borderBottom: "1px solid #ddd",
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2, borderBottom: "1px solid #ddd" }}>
                 <Box sx={{ textAlign: "center", flexGrow: 1 }}>
                   <a className={[dashboard["logo__link"], dashboard["logo"]].join(" ")} href="#">
                     <img src="/images/jimta_home_logo.png" alt="Jimta logo" />
@@ -166,8 +137,7 @@ const CoachUpcomingMatches = () => {
                   </IconButton>
                 )}
               </Box>
-
-               <List>
+                        <List>
                             {/* Dashboard */}
                             <div
                               style={{ cursor: "pointer" }}
@@ -191,7 +161,7 @@ const CoachUpcomingMatches = () => {
                                 </span>
                               </header>
                               <div className={dashboard["collapsible__content--drawer"]}>
-                                <a href="/coach/home" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                                <a href="/player/home" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
                                   Home
                                 </a>
                               </div>
@@ -220,18 +190,17 @@ const CoachUpcomingMatches = () => {
                                 </span>
                               </header>
                               <div className={dashboard["collapsible__content--drawer"]}>
-                                <a href="/coach/team" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
-                                  Team Overview
+                                <a href="/player/team" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                                  Team Info
                                 </a>
-                                <a href="/coach/players" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
-                                  My Players
+                                <a href="/player/teammates" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                                  Teammates
                                 </a>
                               </div>
                             </div>
             
-            
-            
-            {/* Training */}
+                              
+                              {/* Training */}
             <div
               style={{ cursor: "pointer" }}
               onClick={() => toggleChevron("chevron-5")}
@@ -254,11 +223,8 @@ const CoachUpcomingMatches = () => {
                 </span>
               </header>
               <div className={dashboard["collapsible__content--drawer"]}>
-                <a href="/coach/trainings" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                <a href="/player/trainings" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
                   My Trainings
-                </a>
-                <a href="/coach/trainings/add" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
-                  Add Training
                 </a>
               </div>
             </div>
@@ -286,17 +252,19 @@ const CoachUpcomingMatches = () => {
                 </span>
               </header>
               <div className={dashboard["collapsible__content--drawer"]}>
-                <a href="/coach/activities" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                <a href="/player/activities" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
                   View Activities
                 </a>
-                <a href="/coach/activities/videos" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                <a href="/player/activities/videos" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
                   Videos
                 </a>
-                <a href="/coach/activities/images" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                <a href="/player/activities/images" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
                   Images
                 </a>
               </div>
             </div>
+            
+            
             
             
                             {/* Matches */}
@@ -322,16 +290,16 @@ const CoachUpcomingMatches = () => {
                                 </span>
                               </header>
                               <div className={dashboard["collapsible__content--drawer"]}>
-                                <a href="/coach/matches" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                                <a href="/player/matches" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
                                   Upcoming Matches
                                 </a>
-                                <a href="/coach/matches/results" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                                <a href="/player/matches/results" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
                                   Match Results
                                 </a>
                               </div>
                             </div>
             
-                            {/* Performance */}
+                            {/* My Performance */}
                             <div
                               style={{ cursor: "pointer" }}
                               onClick={() => toggleChevron("chevron-3")}
@@ -345,7 +313,7 @@ const CoachUpcomingMatches = () => {
                                   <svg className={[dashboard["collapsible--icon"], dashboard["icon--primary"]].join(" ")}>
                                     <use href="/images/sprite.svg#performance"></use>
                                   </svg>
-                                  <p className={dashboard["collapsible__heading"]}>Performance</p>
+                                  <p className={dashboard["collapsible__heading"]}>My Performance</p>
                                 </div>
                                 <span onClick={() => toggleChevron("chevron-3")} className={dashboard["icon-container"]}>
                                   <svg className={[dashboard["icon"], dashboard["icon--primary"], dashboard["icon--white"], dashboard["collapsible--chevron"]].join(" ")}>
@@ -354,11 +322,11 @@ const CoachUpcomingMatches = () => {
                                 </span>
                               </header>
                               <div className={dashboard["collapsible__content--drawer"]}>
-                                <a href="/coach/performance/add" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
-                                  Record Performance
+                                <a href="/player/performance" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                                  Match Stats
                                 </a>
-                                <a href="/coach/performance" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
-                                  Performance Reports
+                                <a href="/player/performance/season-totals" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                                  Season Totals
                                 </a>
                               </div>
                             </div>
@@ -386,10 +354,10 @@ const CoachUpcomingMatches = () => {
                                 </span>
                               </header>
                               <div className={dashboard["collapsible__content--drawer"]}>
-                                <a href="/coach/profile" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                                <a href="/player/profile" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
                                   My Profile
                                 </a>
-                                <a href="/coach/change-password" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+                                <a href="/player/change-password" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
                                   Change Password
                                 </a>
                               </div>
@@ -397,62 +365,48 @@ const CoachUpcomingMatches = () => {
                           </List>
             </Drawer>
 
-            <Box
-              component="main"
+            <Box component="main"
               sx={{
-                flexGrow: 1,
-                marginTop: 8,
-                fontSize: 18,
-                overflowX: "auto",
-                width: "100%",
-                color: "#9a99ac",
-                transition: "margin-left 0.3s ease-in-out",
+                flexGrow: 1, marginTop: 8, fontSize: 18, overflowX: "auto",
+                width: "100%", color: "#9a99ac", transition: "margin-left 0.3s ease-in-out",
               }}
             >
               <div className={dashboard["secondary--container"]}>
                 <div className={[dashboard["card--add"], dashboard["card--primary"]].join(" ")}>
                   <div className={dashboard["card_body"]}>
-                    <div className={dashboard["card--small-head"]}>Upcoming Matches</div>
+                    <div className={dashboard["card--small-head"]}>My Trainings</div>
                     <p style={{ fontSize: 14, margin: 0, color: "#9a99ac" }}>
-                      {upcoming.length} {upcoming.length === 1 ? "match" : "matches"} scheduled
+                      {rows.length} {rows.length === 1 ? "training" : "trainings"} scheduled
                     </p>
                   </div>
                 </div>
 
                 <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-                  <Table sx={{ minWidth: 650 }} aria-label="upcoming matches table">
+                  <Table sx={{ minWidth: 650 }} aria-label="player trainings table">
                     <TableHead>
                       <TableRow>
                         <StyledTableCell align="left">S/N</StyledTableCell>
-                        <StyledTableCell align="left">Home vs Away</StyledTableCell>
+                        <StyledTableCell align="left">Title</StyledTableCell>
                         <StyledTableCell align="left">Date</StyledTableCell>
+                        <StyledTableCell align="left">Time</StyledTableCell>
                         <StyledTableCell align="left">Venue</StyledTableCell>
-                        <StyledTableCell align="left">Status</StyledTableCell>
+                        <StyledTableCell align="left">Coach</StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {upcoming.length === 0 ? (
+                      {rows.length === 0 ? (
                         <StyledTableRow>
-                          <StyledTableCell colSpan={5} align="center">
-                            No upcoming matches scheduled.
-                          </StyledTableCell>
+                          <StyledTableCell colSpan={6} align="center">No trainings scheduled for your team.</StyledTableCell>
                         </StyledTableRow>
                       ) : (
-                        upcoming.map((row, index) => (
+                        rows.map((row, index) => (
                           <StyledTableRow key={row.id}>
-                            <StyledTableCell component="th" scope="row">
-                              {index + 1}
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              {homeName(row)} <strong>vs</strong> {awayName(row)}
-                            </StyledTableCell>
-                            <StyledTableCell align="left">{row.matchDate || "—"}</StyledTableCell>
+                            <StyledTableCell component="th" scope="row">{index + 1}</StyledTableCell>
+                            <StyledTableCell align="left">{row.title || "—"}</StyledTableCell>
+                            <StyledTableCell align="left">{row.trainingDate || "—"}</StyledTableCell>
+                            <StyledTableCell align="left">{timeRange(row)}</StyledTableCell>
                             <StyledTableCell align="left">{row.venue || "—"}</StyledTableCell>
-                            <StyledTableCell align="left">
-                              <span className={[dashboard["badge"], dashboard["badge--secondary"]].join(" ")}>
-                                {row.status || "SCHEDULED"}
-                              </span>
-                            </StyledTableCell>
+                            <StyledTableCell align="left">{row.coachName || "—"}</StyledTableCell>
                           </StyledTableRow>
                         ))
                       )}
@@ -468,4 +422,4 @@ const CoachUpcomingMatches = () => {
   );
 };
 
-export default CoachUpcomingMatches;
+export default PlayerTrainings;

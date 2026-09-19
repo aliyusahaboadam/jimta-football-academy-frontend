@@ -152,7 +152,7 @@ const AdminDashboard = () => {
                 )}
               </Box>
 
-              <List>
+               <List>
                 {/* Dashboard */}
                 <div
                   style={{ cursor: "pointer" }}
@@ -283,6 +283,83 @@ const AdminDashboard = () => {
                     </a>
                   </div>
                 </div>
+
+
+
+{/* Training */}
+<div
+  style={{ cursor: "pointer" }}
+  onClick={() => toggleChevron("chevron-8")}
+  className={[
+    dashboard["collapsible"],
+    dashboard[activeChevron === "chevron-8" ? "collapsible--expanded" : null],
+  ].join(" ")}
+>
+  <header className={dashboard["collapsible__header"]}>
+    <div className={dashboard["collapsible__icon"]}>
+      <svg className={[dashboard["collapsible--icon"], dashboard["icon--primary"]].join(" ")}>
+        <use href="/images/sprite.svg#training"></use>
+      </svg>
+      <p className={dashboard["collapsible__heading"]}>Training</p>
+    </div>
+    <span onClick={() => toggleChevron("chevron-8")} className={dashboard["icon-container"]}>
+      <svg className={[dashboard["icon"], dashboard["icon--primary"], dashboard["icon--white"], dashboard["collapsible--chevron"]].join(" ")}>
+        <use href="/images/sprite.svg#chevron"></use>
+      </svg>
+    </span>
+  </header>
+  <div className={dashboard["collapsible__content--drawer"]}>
+    <a href="/admin/trainings/add" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+      Add Training
+    </a>
+    <a href="/admin/trainings" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+      View Trainings
+    </a>
+  </div>
+</div>
+
+{/* Activities */}
+<div
+  style={{ cursor: "pointer" }}
+  onClick={() => toggleChevron("chevron-9")}
+  className={[
+    dashboard["collapsible"],
+    dashboard[activeChevron === "chevron-9" ? "collapsible--expanded" : null],
+  ].join(" ")}
+>
+  <header className={dashboard["collapsible__header"]}>
+    <div className={dashboard["collapsible__icon"]}>
+      <svg className={[dashboard["collapsible--icon"], dashboard["icon--primary"]].join(" ")}>
+        <use href="/images/sprite.svg#activity"></use>
+      </svg>
+      <p className={dashboard["collapsible__heading"]}>Activities</p>
+    </div>
+    <span onClick={() => toggleChevron("chevron-9")} className={dashboard["icon-container"]}>
+      <svg className={[dashboard["icon"], dashboard["icon--primary"], dashboard["icon--white"], dashboard["collapsible--chevron"]].join(" ")}>
+        <use href="/images/sprite.svg#chevron"></use>
+      </svg>
+    </span>
+  </header>
+  <div className={dashboard["collapsible__content--drawer"]}>
+    <a href="/admin/activities/add" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+      Add Activity
+    </a>
+    <a href="/admin/activities" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+      View Activities
+    </a>
+    <a href="/admin/activities/videos" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+      Videos
+    </a>
+    <a href="/admin/activities/images" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
+      Images
+    </a>
+  </div>
+</div>
+
+
+
+
+
 
                 {/* Matches */}
                 <div

@@ -1,30 +1,32 @@
-import { composeWithDevTools } from '@redux-devtools/extension';
 import { configureStore } from '@reduxjs/toolkit';
+import activityReducer from './reducer/activitySlice';
+import adminReducer from './reducer/adminSlice';
+import coachReducer from './reducer/coachSlice';
+import loginReducer from './reducer/loginSlice';
+import matchReducer from './reducer/matchSlice';
+import passwordReducer from './reducer/passwordSlice';
+import performanceReducer from './reducer/performanceSlice';
+import playerReducer from './reducer/playerSlice';
+import profileReducer from './reducer/profileSlice';
+import teamReducer from './reducer/teamSlice';
+import trainingReducer from './reducer/trainingSlice';
+import userReducer from './reducer/userSlice';
 
-import adminSlice from '../reducer/adminSlice';
-import coachSlice from '../reducer/coachSlice';
-import matchSlice from '../reducer/matchSlice';
-import passwordSlice from '../reducer/passwordSlice';
-import performanceSlice from '../reducer/performanceSlice';
-import playerSlice from '../reducer/playerSlice';
-import profileSlice from '../reducer/profileSlice';
-import teamSlice from '../reducer/teamSlice';
-import userSlice from '../reducer/userSlice';
-
-const store = configureStore({
-    reducer: {
-        admins: adminSlice,
-        coaches: coachSlice,
-        matches: matchSlice,
-        passwords: passwordSlice,
-        performances: performanceSlice,
-        players: playerSlice,
-        profiles: profileSlice,
-        teams: teamSlice,
-        users: userSlice,
-    },
-
-    devTools: composeWithDevTools(),
+export const store = configureStore({
+  reducer: {
+    login: loginReducer,
+    admins: adminReducer,
+    coaches: coachReducer,
+    players: playerReducer,
+    teams: teamReducer,
+    matches: matchReducer,
+    performances: performanceReducer,
+    profiles: profileReducer,
+    passwords: passwordReducer,
+    users: userReducer,
+    trainings: trainingReducer,
+    activities: activityReducer,
+  },
 });
 
 export default store;

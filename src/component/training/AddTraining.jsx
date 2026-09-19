@@ -7,7 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { object, string } from "yup";
@@ -21,11 +21,13 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
 
-import { saveAdmin } from "../../redux/reducer/adminSlice";
+import { getAllCoaches } from "../../redux/reducer/coachSlice";
+import { getAllTeams } from "../../redux/reducer/teamSlice";
+import { saveTraining } from "../../redux/reducer/trainingSlice";
 import dashboard from "../style/Dashboard.module.css";
 import style from "../style/GlobalForm.module.css";
 
-const AddAdmin = () => {
+const AddTraining = () => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -41,25 +43,39 @@ const AddAdmin = () => {
   const idProfile = openProfile ? "simple-popper" : undefined;
   const handleClickAway = () => setAnchorProfile(null);
 
-  const adminSchema = object({
-    email: string().email("Invalid email").required("Email is required"),
-    firstname: string().max(30, "Too long").required("Firstname is required"),
-    surname: string().max(30, "Too long").required("Surname is required"),
-    lastname: string().max(30, "Too long"),
-    dateOfBirth: string(),
-    gender: string().required("Gender is required"),
-    phoneNumber: string().max(15, "Too long"),
+  const schema = object({
+    title: string().max(120, "Too long").required("Title is required"),
+    description: string().max(1000, "Too long"),
+    trainingDate: string().required("Date is required"),
+    startTime: string().required("Start time is required"),
+    endTime: string(),
+    venue: string().max(200, "Too long").required("Venue is required"),
+    teamId: string().required("Team is required"),
+    coachId: string(),
   });
 
   const [open, setOpen] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [message, setMessage] = useState("");
 
-  const adminState = useSelector((state) => state.admins);
-  const { savingStatus } = adminState;
+  const trainingState = useSelector((state) => state.trainings);
+  const { savingStatus } = trainingState;
+
+  const teamState = useSelector((state) => state.teams);
+  const { teams } = teamState;
+  const teamList = Array.isArray(teams) ? teams : [];
+
+  const coachState = useSelector((state) => state.coaches);
+  const { coaches } = coachState;
+  const coachList = Array.isArray(coaches) ? coaches : [];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getAllTeams());
+    dispatch(getAllCoaches());
+  }, [dispatch]);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -74,30 +90,25 @@ const AddAdmin = () => {
 
   const handleFormSubmit = async (values, { resetForm }) => {
     const payload = {
-      email: values.email,
-      firstname: values.firstname,
-      surname: values.surname,
-      lastname: values.lastname || null,
-      phoneNumber: values.phoneNumber || null,
-      profile: {
-        firstname: values.firstname,
-        surname: values.surname,
-        lastname: values.lastname || null,
-        dateOfBirth: values.dateOfBirth || null,
-        gender: values.gender,
-        phoneNumber: values.phoneNumber || null,
-      },
+      title: values.title,
+      description: values.description || null,
+      trainingDate: values.trainingDate,
+      startTime: values.startTime,
+      endTime: values.endTime || null,
+      venue: values.venue,
+      teamId: Number(values.teamId),
+      coachId: values.coachId ? Number(values.coachId) : null,
     };
 
     try {
-      const result = await dispatch(saveAdmin(payload)).unwrap();
+      const result = await dispatch(saveTraining(payload)).unwrap();
       setAlertType("success");
-      setMessage(result.message || "Admin added successfully");
+      setMessage(result.message || "Training added successfully");
+      setTimeout(() => navigate("/admin/trainings"), 1200);
     } catch (error) {
       setAlertType("error");
       setMessage(error?.message || String(error) || "Something went wrong");
     }
-
     setOpen(true);
     resetForm();
   };
@@ -107,7 +118,6 @@ const AddAdmin = () => {
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
 
-        {/* Navbar */}
         <AppBar position="fixed" sx={{ zIndex: 2, background: "white", color: "#d71b3b" }}>
           <Toolbar sx={{ zIndex: 2, display: "flex", justifyContent: "space-between" }}>
             {!isLargeScreen && (
@@ -115,29 +125,20 @@ const AddAdmin = () => {
                 <MenuIcon sx={{ color: "inherit", fontSize: 30 }} />
               </IconButton>
             )}
-
             <div>
               <IconButton
                 onClick={profilePopup}
-                sx={{
-                  backgroundColor: "#d71b3b",
-                  "&:hover": { backgroundColor: "#b8152f" },
-                }}
+                sx={{ backgroundColor: "#d71b3b", "&:hover": { backgroundColor: "#b8152f" } }}
               >
                 <PersonOutlineOutlinedIcon sx={{ color: "white", fontSize: 25 }} />
               </IconButton>
-
               <BasePopup sx={{ zIndex: 2 }} id={idProfile} open={openProfile} anchor={anchorProfile}>
                 <div className={dashboard["profile--selection__container"]}>
                   <div className={dashboard["profile"]}>
-                    <a href="/admin/profile" className={dashboard["link--profile"]}>
-                      Profile
-                    </a>
+                    <a href="/admin/profile" className={dashboard["link--profile"]}>Profile</a>
                   </div>
                   <div className={dashboard["logout"]}>
-                    <a onClick={logout} className={dashboard["link--profile"]}>
-                      Logout
-                    </a>
+                    <a onClick={logout} className={dashboard["link--profile"]}>Logout</a>
                   </div>
                 </div>
               </BasePopup>
@@ -145,7 +146,6 @@ const AddAdmin = () => {
           </Toolbar>
         </AppBar>
 
-        {/* Drawer */}
         <Drawer
           variant={isLargeScreen ? "persistent" : "temporary"}
           open={isLargeScreen || isDrawerOpen}
@@ -157,21 +157,12 @@ const AddAdmin = () => {
             "& .MuiBackdrop-root": { backgroundColor: "rgba(215, 27, 59, 0.15)" },
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              p: 2,
-              borderBottom: "1px solid #ddd",
-            }}
-          >
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2, borderBottom: "1px solid #ddd" }}>
             <Box sx={{ textAlign: "center", flexGrow: 1 }}>
               <a className={[dashboard["logo__link"], dashboard["logo"]].join(" ")} href="#">
                 <img src="/images/jimta_home_logo.png" alt="Jimta logo" />
               </a>
             </Box>
-
             {!isLargeScreen && (
               <IconButton onClick={toggleDrawer}>
                 <Cancel sx={{ color: "#d71b3b", fontSize: 30 }} />
@@ -524,7 +515,6 @@ const AddAdmin = () => {
                       </List>
         </Drawer>
 
-        {/* Main */}
         <Box
           component="main"
           sx={{
@@ -540,177 +530,120 @@ const AddAdmin = () => {
           <div className={style["form-page"]}>
             <Formik
               initialValues={{
-                email: "",
-                firstname: "",
-                surname: "",
-                lastname: "",
-                dateOfBirth: "",
-                gender: "",
-                phoneNumber: "",
+                title: "",
+                description: "",
+                trainingDate: "",
+                startTime: "",
+                endTime: "",
+                venue: "",
+                teamId: "",
+                coachId: "",
               }}
-              validationSchema={adminSchema}
+              validationSchema={schema}
               onSubmit={handleFormSubmit}
             >
-              {({
-                errors,
-                handleChange,
-                handleSubmit,
-                values,
-                isSubmitting,
-                touched,
-                handleBlur,
-              }) => (
+              {({ errors, handleChange, handleSubmit, values, isSubmitting, touched, handleBlur }) => (
                 <div className={style.form}>
                   <section className={style.container__brand}>
                     <img src="/images/jimta_home_logo.png" alt="Logo" />
                   </section>
 
-                  <p className={style["form-header"]}>Register Admin</p>
-
-                  <h3 className={style["form-section"]}>Personal</h3>
+                  <p className={style["form-header"]}>Schedule Training</p>
 
                   <TextField
-                    label="Firstname"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.firstname}
-                    name="firstname"
-                    error={touched.firstname && Boolean(errors.firstname)}
-                    helperText={touched.firstname && errors.firstname}
-                    slotProps={{
-                      formHelperText: { sx: { fontSize: 15 } },
-                      input: { style: { fontSize: 18 } },
-                      inputLabel: { style: { fontSize: 16 } },
-                    }}
+                    label="Title"
+                    fullWidth margin="normal"
+                    onChange={handleChange} onBlur={handleBlur}
+                    value={values.title} name="title"
+                    error={touched.title && Boolean(errors.title)}
+                    helperText={touched.title && errors.title}
+                    slotProps={{ formHelperText: { sx: { fontSize: 15 } }, input: { style: { fontSize: 18 } }, inputLabel: { style: { fontSize: 16 } } }}
                   />
 
                   <TextField
-                    label="Surname"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.surname}
-                    name="surname"
-                    error={touched.surname && Boolean(errors.surname)}
-                    helperText={touched.surname && errors.surname}
-                    slotProps={{
-                      formHelperText: { sx: { fontSize: 15 } },
-                      input: { style: { fontSize: 18 } },
-                      inputLabel: { style: { fontSize: 16 } },
-                    }}
+                    label="Description"
+                    multiline rows={3}
+                    fullWidth margin="normal"
+                    onChange={handleChange} onBlur={handleBlur}
+                    value={values.description} name="description"
+                    slotProps={{ formHelperText: { sx: { fontSize: 15 } }, input: { style: { fontSize: 18 } }, inputLabel: { style: { fontSize: 16 } } }}
                   />
 
                   <TextField
-                    label="Lastname"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.lastname}
-                    name="lastname"
-                    error={touched.lastname && Boolean(errors.lastname)}
-                    helperText={touched.lastname && errors.lastname}
-                    slotProps={{
-                      formHelperText: { sx: { fontSize: 15 } },
-                      input: { style: { fontSize: 18 } },
-                      inputLabel: { style: { fontSize: 16 } },
-                    }}
+                    label="Training Date"
+                    type="date"
+                    fullWidth margin="normal"
+                    onChange={handleChange} onBlur={handleBlur}
+                    value={values.trainingDate} name="trainingDate"
+                    error={touched.trainingDate && Boolean(errors.trainingDate)}
+                    helperText={touched.trainingDate && errors.trainingDate}
+                    slotProps={{ formHelperText: { sx: { fontSize: 15 } }, input: { style: { fontSize: 18 } }, inputLabel: { style: { fontSize: 16 }, shrink: true } }}
                   />
 
                   <TextField
-                    label="Email"
-                    type="email"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.email}
-                    name="email"
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
-                    slotProps={{
-                      formHelperText: { sx: { fontSize: 15 } },
-                      input: { style: { fontSize: 18 } },
-                      inputLabel: { style: { fontSize: 16 } },
-                    }}
+                    label="Start Time"
+                    type="time"
+                    fullWidth margin="normal"
+                    onChange={handleChange} onBlur={handleBlur}
+                    value={values.startTime} name="startTime"
+                    error={touched.startTime && Boolean(errors.startTime)}
+                    helperText={touched.startTime && errors.startTime}
+                    slotProps={{ formHelperText: { sx: { fontSize: 15 } }, input: { style: { fontSize: 18 } }, inputLabel: { style: { fontSize: 16 }, shrink: true } }}
                   />
 
                   <TextField
-                    label="Phone Number"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.phoneNumber}
-                    name="phoneNumber"
-                    error={touched.phoneNumber && Boolean(errors.phoneNumber)}
-                    helperText={touched.phoneNumber && errors.phoneNumber}
-                    slotProps={{
-                      formHelperText: { sx: { fontSize: 15 } },
-                      input: { style: { fontSize: 18 } },
-                      inputLabel: { style: { fontSize: 16 } },
-                    }}
+                    label="End Time (optional)"
+                    type="time"
+                    fullWidth margin="normal"
+                    onChange={handleChange} onBlur={handleBlur}
+                    value={values.endTime} name="endTime"
+                    slotProps={{ formHelperText: { sx: { fontSize: 15 } }, input: { style: { fontSize: 18 } }, inputLabel: { style: { fontSize: 16 }, shrink: true } }}
                   />
 
                   <TextField
-                    label="Date of Birth (YYYY-MM-DD)"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.dateOfBirth}
-                    name="dateOfBirth"
-                    error={touched.dateOfBirth && Boolean(errors.dateOfBirth)}
-                    helperText={touched.dateOfBirth && errors.dateOfBirth}
-                    slotProps={{
-                      formHelperText: { sx: { fontSize: 15 } },
-                      input: { style: { fontSize: 18 } },
-                      inputLabel: { style: { fontSize: 16 } },
-                    }}
+                    label="Venue"
+                    fullWidth margin="normal"
+                    onChange={handleChange} onBlur={handleBlur}
+                    value={values.venue} name="venue"
+                    error={touched.venue && Boolean(errors.venue)}
+                    helperText={touched.venue && errors.venue}
+                    slotProps={{ formHelperText: { sx: { fontSize: 15 } }, input: { style: { fontSize: 18 } }, inputLabel: { style: { fontSize: 16 } } }}
                   />
 
-                  <FormControl
-                    fullWidth
-                    margin="normal"
-                    error={touched.gender && Boolean(errors.gender)}
-                  >
-                    <InputLabel sx={{ fontSize: 16 }}>Gender</InputLabel>
-                    <Select
-                      label="Gender"
-                      name="gender"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.gender}
-                      sx={{ fontSize: 18 }}
-                    >
-                      <MenuItem sx={{ fontSize: 18 }} value="Male">
-                        Male
-                      </MenuItem>
-                      <MenuItem sx={{ fontSize: 18 }} value="Female">
-                        Female
-                      </MenuItem>
+                  <FormControl fullWidth margin="normal" error={touched.teamId && Boolean(errors.teamId)}>
+                    <InputLabel sx={{ fontSize: 16 }}>Team</InputLabel>
+                    <Select label="Team" name="teamId" onChange={handleChange} onBlur={handleBlur} value={values.teamId} sx={{ fontSize: 18 }}>
+                      {teamList.length === 0 ? (
+                        <MenuItem disabled sx={{ fontSize: 18 }} value="">No teams available</MenuItem>
+                      ) : (
+                        teamList.map((t) => (
+                          <MenuItem key={t.id} sx={{ fontSize: 18 }} value={t.id}>
+                            {t.name}{t.ageGroup ? ` (${t.ageGroup})` : ""}
+                          </MenuItem>
+                        ))
+                      )}
                     </Select>
-                    <FormHelperText sx={{ fontSize: 15 }}>
-                      {touched.gender && errors.gender}
-                    </FormHelperText>
+                    <FormHelperText sx={{ fontSize: 15 }}>{touched.teamId && errors.teamId}</FormHelperText>
+                  </FormControl>
+
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel sx={{ fontSize: 16 }}>Coach (optional)</InputLabel>
+                    <Select label="Coach (optional)" name="coachId" onChange={handleChange} onBlur={handleBlur} value={values.coachId} sx={{ fontSize: 18 }}>
+                      <MenuItem sx={{ fontSize: 18 }} value="">Leave empty — use team's coach</MenuItem>
+                      {coachList.map((c) => (
+                        <MenuItem key={c.id} sx={{ fontSize: 18 }} value={c.id}>
+                          {[c.firstname, c.surname].filter(Boolean).join(" ") || `Coach #${c.id}`}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
 
                   <button
                     disabled={isSubmitting || savingStatus === "loading"}
-                    type="submit"
-                    onClick={handleSubmit}
+                    type="submit" onClick={handleSubmit}
                     className={[style["btn"], style["btn--block"], style["btn--primary"]].join(" ")}
                   >
-                    {isSubmitting || savingStatus === "loading" ? "Saving..." : "Save Admin"}
+                    {isSubmitting || savingStatus === "loading" ? "Saving..." : "Save Training"}
                   </button>
                 </div>
               )}
@@ -723,17 +656,9 @@ const AddAdmin = () => {
           </div>
         </Box>
 
-        {/* Snackbar */}
-        <Snackbar
-          open={open}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "center", horizontal: "center" }}
-        >
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: "center", horizontal: "center" }}>
           <div>
-            <Dialog
-              open={open}
-              onClose={handleClose}
+            <Dialog open={open} onClose={handleClose}
               BackdropProps={{ sx: { backgroundColor: "rgba(215, 27, 59, 0.2)" } }}
               sx={{ "& .MuiDialog-paper": { width: "100%", borderRadius: "15px" } }}
             >
@@ -741,43 +666,19 @@ const AddAdmin = () => {
                 <div style={{ width: "100%", background: "#fff" }} className={dashboard["card--alert-success"]}>
                   <div className={dashboard["card_body"]}>
                     <span className={[dashboard["icon-container"], dashboard["alert-close"]].join(" ")}>
-                      <IconButton onClick={handleClose}>
-                        <CloseIcon sx={{ fontSize: 30, color: "#d71b3b" }} />
-                      </IconButton>
+                      <IconButton onClick={handleClose}><CloseIcon sx={{ fontSize: 30, color: "#d71b3b" }} /></IconButton>
                     </span>
-                    <span className={dashboard["icon-container"]}>
-                      <svg className={[dashboard["icon--big"], dashboard["icon--success"]].join(" ")}>
-                        <use href="/images/sprite.svg#success-icon"></use>
-                      </svg>
-                    </span>
-                    <Typography sx={{ fontSize: 21 }}>
-                      <p className={dashboard["alert-message"]}>{message}</p>
-                    </Typography>
+                    <Typography sx={{ fontSize: 21 }}><p className={dashboard["alert-message"]}>{message}</p></Typography>
                   </div>
-                  <Typography sx={{ fontSize: 20 }}>
-                    <p className={dashboard["card_footer"]}>success</p>
-                  </Typography>
                 </div>
               ) : (
                 <div style={{ width: "100%", background: "#fff" }} className={dashboard["card--alert-error"]}>
                   <div className={dashboard["card_body"]}>
                     <span className={[dashboard["icon-container"], dashboard["alert-close"]].join(" ")}>
-                      <IconButton onClick={handleClose}>
-                        <CloseIcon sx={{ fontSize: 30 }} />
-                      </IconButton>
+                      <IconButton onClick={handleClose}><CloseIcon sx={{ fontSize: 30 }} /></IconButton>
                     </span>
-                    <span className={dashboard["icon-container"]}>
-                      <svg className={[dashboard["icon--big"], dashboard["icon--error"]].join(" ")}>
-                        <use href="/images/sprite.svg#error-icon"></use>
-                      </svg>
-                    </span>
-                    <Typography sx={{ fontSize: 21 }}>
-                      <p className={dashboard["alert-message"]}>{message}</p>
-                    </Typography>
+                    <Typography sx={{ fontSize: 21 }}><p className={dashboard["alert-message"]}>{message}</p></Typography>
                   </div>
-                  <Typography sx={{ fontSize: 20 }}>
-                    <p className={dashboard["card_footer"]}>error</p>
-                  </Typography>
                 </div>
               )}
             </Dialog>
@@ -788,4 +689,4 @@ const AddAdmin = () => {
   );
 };
 
-export default AddAdmin;
+export default AddTraining;
