@@ -1,26 +1,23 @@
-import { IconButton } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-    getActivitiesByTeamId,
-    getImageActivitiesByTeamId,
-    getVideoActivitiesByTeamId,
-} from "../../redux/reducer/activitySlice";
-import { getAuthenticatedCoach } from "../../redux/reducer/coachSlice";
-import { getTeamsByCoachId } from "../../redux/reducer/teamSlice";
-import Loading from "../Chunks/loading";
-import dashboard from "../style/Dashboard.module.css";
-import ActivityCard from "./ActivityCard";
-
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { Cancel, Menu as MenuIcon } from "@mui/icons-material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { AppBar, Box, CssBaseline, Drawer, List, Toolbar } from "@mui/material";
+import { AppBar, Box, CssBaseline, Drawer, IconButton, List, Toolbar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  getActivitiesByTeamId,
+  getImageActivitiesByTeamId,
+  getVideoActivitiesByTeamId,
+} from "../../redux/reducer/activitySlice";
+import { getAuthenticatedCoach } from "../../redux/reducer/coachSlice";
+import { getTeamsByCoachId } from "../../redux/reducer/teamSlice";
+import ActivityCard from "../activity/ActivityCard";
+import Loading from "../Chunks/loading";
+import dashboard from "../style/Dashboard.module.css";
 
 const CoachActivities = () => {
   const theme = useTheme();
