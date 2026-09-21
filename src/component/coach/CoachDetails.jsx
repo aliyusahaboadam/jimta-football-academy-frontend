@@ -10,9 +10,8 @@ import style from "../style/GlobalForm.module.css";
 
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { Cancel, Menu as MenuIcon } from "@mui/icons-material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { AppBar, Box, CssBaseline, Drawer, List, Toolbar } from "@mui/material";
+import { AppBar, Box, CssBaseline, Toolbar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
@@ -74,11 +73,7 @@ const CoachDetails = () => {
 
         <AppBar position="fixed" sx={{ zIndex: 2, background: "white", color: "#d71b3b" }}>
           <Toolbar sx={{ zIndex: 2, display: "flex", justifyContent: "space-between" }}>
-            {!isLargeScreen && (
-              <IconButton edge="start" color="inherit" onClick={toggleDrawer}>
-                <MenuIcon sx={{ color: "inherit", fontSize: 30 }} />
-              </IconButton>
-            )}
+        
             <div>
               <IconButton
                 onClick={profilePopup}
@@ -100,49 +95,7 @@ const CoachDetails = () => {
           </Toolbar>
         </AppBar>
 
-        <Drawer
-          variant={isLargeScreen ? "persistent" : "temporary"}
-          open={isLargeScreen || isDrawerOpen}
-          onClose={!isLargeScreen ? toggleDrawer : undefined}
-          sx={{
-            width: 240,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": { width: 240, boxSizing: "border-box" },
-            "& .MuiBackdrop-root": { backgroundColor: "rgba(215, 27, 59, 0.15)" },
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2, borderBottom: "1px solid #ddd" }}>
-            <Box sx={{ textAlign: "center", flexGrow: 1 }}>
-              <a className={[dashboard["logo__link"], dashboard["logo"]].join(" ")} href="#">
-                <img src="/images/jimta_home_logo.png" alt="Jimta logo" />
-              </a>
-            </Box>
-            {!isLargeScreen && (
-              <IconButton onClick={toggleDrawer}>
-                <Cancel sx={{ color: "#d71b3b", fontSize: 30 }} />
-              </IconButton>
-            )}
-          </Box>
-          <List>
-            <div
-              style={{ cursor: "pointer" }}
-              onClick={() => toggleChevron("chevron-2")}
-              className={[dashboard["collapsible"], dashboard["collapsible--expanded"]].join(" ")}
-            >
-              <header className={dashboard["collapsible__header"]}>
-                <div className={dashboard["collapsible__icon"]}>
-                  <svg className={[dashboard["collapsible--icon"], dashboard["icon--primary"]].join(" ")}>
-                    <use href="/images/sprite.svg#coach"></use>
-                  </svg>
-                  <p className={dashboard["collapsible__heading"]}>Coaches</p>
-                </div>
-              </header>
-              <div className={dashboard["collapsible__content--drawer"]}>
-                <a href="/admin/coaches" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>View Coaches</a>
-              </div>
-            </div>
-          </List>
-        </Drawer>
+    
 
         <Box
           component="main"
@@ -174,7 +127,15 @@ const CoachDetails = () => {
               <div className={dashboard["card--details"]}>
                 <span>Lastname:</span> {profileData?.lastname || "—"}
               </div>
+
+
+                            <div className={dashboard["card--details"]}>
+                <span>Username:</span> {profileData?.username || "—"}
+              </div>
               <div className={dashboard["card--details"]}>
+                <span>Email:</span> {profileData?.email || "—"}
+              </div>
+                  <div className={dashboard["card--details"]}>
                 <span>Date of Birth:</span> {profileData?.dateOfBirth || "—"}
               </div>
               <div className={dashboard["card--details"]}>

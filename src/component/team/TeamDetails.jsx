@@ -9,9 +9,9 @@ import style from "../style/GlobalForm.module.css";
 
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { Cancel, Menu as MenuIcon } from "@mui/icons-material";
+import { Menu as MenuIcon } from "@mui/icons-material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { AppBar, Box, CssBaseline, Drawer, List, Toolbar } from "@mui/material";
+import { AppBar, Box, CssBaseline, Toolbar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
@@ -96,49 +96,7 @@ const TeamDetails = () => {
           </Toolbar>
         </AppBar>
 
-        <Drawer
-          variant={isLargeScreen ? "persistent" : "temporary"}
-          open={isLargeScreen || isDrawerOpen}
-          onClose={!isLargeScreen ? toggleDrawer : undefined}
-          sx={{
-            width: 240,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": { width: 240, boxSizing: "border-box" },
-            "& .MuiBackdrop-root": { backgroundColor: "rgba(215, 27, 59, 0.15)" },
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2, borderBottom: "1px solid #ddd" }}>
-            <Box sx={{ textAlign: "center", flexGrow: 1 }}>
-              <a className={[dashboard["logo__link"], dashboard["logo"]].join(" ")} href="#">
-                <img src="/images/jimta_home_logo.png" alt="Jimta logo" />
-              </a>
-            </Box>
-            {!isLargeScreen && (
-              <IconButton onClick={toggleDrawer}>
-                <Cancel sx={{ color: "#d71b3b", fontSize: 30 }} />
-              </IconButton>
-            )}
-          </Box>
-          <List>
-            <div
-              style={{ cursor: "pointer" }}
-              onClick={() => toggleChevron("chevron-3")}
-              className={[dashboard["collapsible"], dashboard["collapsible--expanded"]].join(" ")}
-            >
-              <header className={dashboard["collapsible__header"]}>
-                <div className={dashboard["collapsible__icon"]}>
-                  <svg className={[dashboard["collapsible--icon"], dashboard["icon--primary"]].join(" ")}>
-                    <use href="/images/sprite.svg#team"></use>
-                  </svg>
-                  <p className={dashboard["collapsible__heading"]}>Teams</p>
-                </div>
-              </header>
-              <div className={dashboard["collapsible__content--drawer"]}>
-                <a href="/admin/teams" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>View Teams</a>
-              </div>
-            </div>
-          </List>
-        </Drawer>
+    
 
         <Box
           component="main"
@@ -172,9 +130,7 @@ const TeamDetails = () => {
               <div className={dashboard["card--details"]}>
                 <span>Coach:</span> {data?.coachName || "—"}
               </div>
-              <div className={dashboard["card--details"]}>
-                <span>Players:</span> {data?.playerCount ?? "—"}
-              </div>
+           
 
               <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
                 <button

@@ -50,6 +50,9 @@ const PlayerGallery = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [teamFilter, setTeamFilter] = useState("");
 
+  const PLACEHOLDER_PHOTO = "/images/player-placeholder.png";
+const PHOTO_BASE = "https://images-0.s3.us-west-2.amazonaws.com/";
+
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/login");
@@ -609,7 +612,9 @@ const PlayerGallery = () => {
                   <div className={dashboard["gallery__grid"]}>
                     {filtered.map((player) => {
                       const name = fullName(player);
-                      const photo = player?.photoUrl || PLACEHOLDER_PHOTO;
+                      const photo = player?.photoUrl
+  ? PHOTO_BASE + player.photoUrl
+  : PLACEHOLDER_PHOTO;
                       const jersey =
                         player?.jerseyNumber != null
                           ? `#${player.jerseyNumber}`

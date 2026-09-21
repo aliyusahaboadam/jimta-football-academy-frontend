@@ -1,8 +1,8 @@
 import { NavigateBefore, NavigateNext } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
 import dashboard from "../style/Dashboard.module.css";
-
 const PHOTO_BASE = "https://images-0.s3.us-west-2.amazonaws.com/";
 
 // ---------- URL extractors ----------
@@ -73,6 +73,32 @@ const PhotoCarousel = ({ photoUrls }) => {
   );
 };
 
+
+
+const SOCIAL_PLATFORMS = [
+  {
+    key: "facebook",
+    label: "Facebook",
+    field: "facebookUrl",
+    Icon: FaFacebookF,
+    className: "social__link--facebook",
+  },
+  {
+    key: "instagram",
+    label: "Instagram",
+    field: "instagramUrl",
+    Icon: FaInstagram,
+    className: "social__link--instagram",
+  },
+  {
+    key: "tiktok",
+    label: "TikTok",
+    field: "tiktokUrl",
+    Icon: FaTiktok,
+    className: "social__link--tiktok",
+  },
+];
+
 // ---------- Video embeds ----------
 const FacebookEmbed = ({ url, autoplay }) => (
   <iframe
@@ -128,50 +154,33 @@ const TiktokEmbed = ({ url }) => {
 
 // ---------- Platform tabs ----------
 const VideoSection = ({ activity }) => {
-  const platforms = [
-    { key: "facebook", label: "Facebook", url: activity.facebookUrl },
-    { key: "instagram", label: "Instagram", url: activity.instagramUrl },
-    { key: "tiktok", label: "TikTok", url: activity.tiktokUrl },
-  ].filter((p) => p.url);
-
-  const [active, setActive] = useState(platforms[0]?.key || null);
-
-  useEffect(() => {
-    // Keep the active tab valid when the activity changes
-    if (!platforms.find((p) => p.key === active)) {
-      setActive(platforms[0]?.key || null);
-    }
-  }, [activity.id]); // eslint-disable-line
-
-  if (platforms.length === 0) return null;
-
-  const current = platforms.find((p) => p.key === active);
+  const links = SOCIAL_PLATFORMS.filter((p) => activity[p.field]);
+  if (links.length === 0) return null;
 
   return (
     <div className={dashboard["video__section"]}>
-      {platforms.length > 1 && (
-        <div className={dashboard["video__tabs"]}>
-          {platforms.map((p) => (
-            <button
+      <p className={dashboard["video__label"]}>Watch on</p>
+      <div className={dashboard["video__links"]}>
+        {links.map((p) => {
+          const { Icon } = p;
+          return (
+            <a
               key={p.key}
-              type="button"
-              className={`${dashboard["video__tab"]} ${
-                p.key === active ? dashboard["video__tab--active"] : ""
-              }`}
-              onClick={(e) => { e.stopPropagation(); setActive(p.key); }}
+              href={activity[p.field]}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={[dashboard["video__linkBtn"], dashboard[p.className]].join(" ")}
+              onClick={(e) => e.stopPropagation()}
+              aria-label={`Watch on ${p.label}`}
             >
-              {p.label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {current?.key === "facebook" && (
-        // Autoplay muted for the topmost video only (as requested)
-        <FacebookEmbed url={current.url} autoplay={activity.autoplayFacebook !== false} />
-      )}
-      {current?.key === "instagram" && <InstagramEmbed url={current.url} />}
-      {current?.key === "tiktok" && <TiktokEmbed url={current.url} />}
+              <span className={dashboard["video__iconWrap"]}>
+                <Icon size={14} />
+              </span>
+              <span>{p.label}</span>
+            </a>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -179,6 +188,9 @@ const VideoSection = ({ activity }) => {
 // ---------- The full card ----------
 // ---------- The full card ----------
 const ActivityCard = ({ activity, onClick, actionMenu }) => {
+ 
+ 
+ 
   return (
     <div
       className={dashboard["activity__card"]}

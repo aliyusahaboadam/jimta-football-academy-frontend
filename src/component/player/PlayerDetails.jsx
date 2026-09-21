@@ -10,9 +10,8 @@ import style from "../style/GlobalForm.module.css";
 
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { Cancel, Menu as MenuIcon } from "@mui/icons-material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { AppBar, Box, CssBaseline, Drawer, List, Toolbar } from "@mui/material";
+import { AppBar, Box, CssBaseline, Toolbar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
@@ -32,6 +31,8 @@ const PlayerDetails = () => {
   const openProfile = Boolean(anchorProfile);
   const idProfile = openProfile ? "simple-popper" : undefined;
   const handleClickAway = () => setAnchorProfile(null);
+
+  const PHOTO_BASE = "https://images-0.s3.us-west-2.amazonaws.com/";
 
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -81,11 +82,7 @@ const PlayerDetails = () => {
 
         <AppBar position="fixed" sx={{ zIndex: 2, background: "white", color: "#d71b3b" }}>
           <Toolbar sx={{ zIndex: 2, display: "flex", justifyContent: "space-between" }}>
-            {!isLargeScreen && (
-              <IconButton edge="start" color="inherit" onClick={toggleDrawer}>
-                <MenuIcon sx={{ color: "inherit", fontSize: 30 }} />
-              </IconButton>
-            )}
+         
             <div>
               <IconButton
                 onClick={profilePopup}
@@ -107,82 +104,7 @@ const PlayerDetails = () => {
           </Toolbar>
         </AppBar>
 
-        <Drawer
-          variant={isLargeScreen ? "persistent" : "temporary"}
-          open={isLargeScreen || isDrawerOpen}
-          onClose={!isLargeScreen ? toggleDrawer : undefined}
-          sx={{
-            width: 240,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": { width: 240, boxSizing: "border-box" },
-            "& .MuiBackdrop-root": { backgroundColor: "rgba(215, 27, 59, 0.15)" },
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              p: 2,
-              borderBottom: "1px solid #ddd",
-            }}
-          >
-            <Box sx={{ textAlign: "center", flexGrow: 1 }}>
-              <a className={[dashboard["logo__link"], dashboard["logo"]].join(" ")} href="#">
-                <img src="/images/jimta_home_logo.png" alt="Jimta logo" />
-              </a>
-            </Box>
-            {!isLargeScreen && (
-              <IconButton onClick={toggleDrawer}>
-                <Cancel sx={{ color: "#d71b3b", fontSize: 30 }} />
-              </IconButton>
-            )}
-          </Box>
-
-          <List>
-            <div
-              style={{ cursor: "pointer" }}
-              onClick={() => toggleChevron("chevron-1")}
-              className={[dashboard["collapsible"], dashboard["collapsible--expanded"]].join(" ")}
-            >
-              <header className={dashboard["collapsible__header"]}>
-                <div className={dashboard["collapsible__icon"]}>
-                  <svg className={[dashboard["collapsible--icon"], dashboard["icon--primary"]].join(" ")}>
-                    <use href="/images/sprite.svg#player"></use>
-                  </svg>
-                  <p className={dashboard["collapsible__heading"]}>Players</p>
-                </div>
-              </header>
-              <div className={dashboard["collapsible__content--drawer"]}>
-                <a href="/admin/players/add" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
-                  Add Player
-                </a>
-                <a href="/admin/players" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
-                  View Players
-                </a>
-              </div>
-            </div>
-            <div
-              style={{ cursor: "pointer" }}
-              onClick={() => toggleChevron("chevron-0")}
-              className={dashboard["collapsible"]}
-            >
-              <header className={dashboard["collapsible__header"]}>
-                <div className={dashboard["collapsible__icon"]}>
-                  <svg className={[dashboard["collapsible--icon"], dashboard["icon--primary"]].join(" ")}>
-                    <use href="/images/sprite.svg#dashboard"></use>
-                  </svg>
-                  <p className={dashboard["collapsible__heading"]}>Dashboard</p>
-                </div>
-              </header>
-              <div className={dashboard["collapsible__content--drawer"]}>
-                <a href="/admin/home" className={dashboard["link--drawer"]} onClick={(e) => e.stopPropagation()}>
-                  Home
-                </a>
-              </div>
-            </div>
-          </List>
-        </Drawer>
+     
 
         <Box
           component="main"
@@ -199,7 +121,18 @@ const PlayerDetails = () => {
           <div className={dashboard["secondary--container"]}>
             <div className={dashboard["card--details__wrapper"]}>
               <section className={style.container__brand}>
-                <img src="/images/jimta_home_logo.png" alt="Logo" />
+
+                              {data?.photoUrl && (
+                <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+                              <img
+  src={PHOTO_BASE + data.photoUrl}
+  alt={fullName}
+  style={{ width: 140, height: 140, borderRadius: "50%", objectFit: "cover", border: "3px solid #d71b3b" }}
+/>
+                </div>
+              )}
+
+ 
               </section>
 
               <p className={style["form-header"]}>{fullName}</p>
@@ -217,12 +150,21 @@ const PlayerDetails = () => {
               <div className={dashboard["card--details"]}>
                 <span>Date of Birth:</span> {profileData?.dateOfBirth || "—"}
               </div>
+
+                       <div className={dashboard["card--details"]}>
+                              <span>Username:</span> {profileData?.username || "—"}
+                            </div>
+                            <div className={dashboard["card--details"]}>
+                              <span>Email:</span> {profileData?.email || "—"}
+                            </div>
               <div className={dashboard["card--details"]}>
                 <span>Gender:</span> {profileData?.gender || "—"}
               </div>
               <div className={dashboard["card--details"]}>
                 <span>Phone:</span> {profileData?.phoneNumber || "—"}
               </div>
+
+
 
               <h3 className={style["form-section"]}>Football</h3>
               <div className={dashboard["card--details"]}>
@@ -250,15 +192,7 @@ const PlayerDetails = () => {
                 <span>Previous Club:</span> {data?.previousClub || "—"}
               </div>
 
-              {data?.photoUrl && (
-                <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
-                  <img
-                    src={data.photoUrl}
-                    alt={fullName}
-                    style={{ width: 140, height: 140, borderRadius: "50%", objectFit: "cover", border: "3px solid #d71b3b" }}
-                  />
-                </div>
-              )}
+
 
               <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
                 <button

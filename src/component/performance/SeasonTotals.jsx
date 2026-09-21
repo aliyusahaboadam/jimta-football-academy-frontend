@@ -547,7 +547,7 @@ const SeasonTotals = () => {
                         <div className={dashboard["card_button_and_icon"]}>
                           <span className={dashboard["icon-container"]}>
                             <svg className={[dashboard["icon--big"], dashboard["icon--primary"]].join(" ")}>
-                              <use href="/images/sprite.svg#performance"></use>
+                              <use href="/images/sprite.svg#goals"></use>
                             </svg>
                           </span>
                           <span className={dashboard["badge"]}>{totals.goals ?? 0}</span>
@@ -561,7 +561,7 @@ const SeasonTotals = () => {
                         <div className={dashboard["card_button_and_icon"]}>
                           <span className={dashboard["icon-container"]}>
                             <svg className={[dashboard["icon--big"], dashboard["icon--primary"]].join(" ")}>
-                              <use href="/images/sprite.svg#performance"></use>
+                              <use href="/images/sprite.svg#assists"></use>
                             </svg>
                           </span>
                           <span className={dashboard["badge"]}>{totals.assists ?? 0}</span>
@@ -575,7 +575,7 @@ const SeasonTotals = () => {
                         <div className={dashboard["card_button_and_icon"]}>
                           <span className={dashboard["icon-container"]}>
                             <svg className={[dashboard["icon--big"], dashboard["icon--primary"]].join(" ")}>
-                              <use href="/images/sprite.svg#performance"></use>
+                              <use href="/images/sprite.svg#profile"></use>
                             </svg>
                           </span>
                           <span className={dashboard["badge"]}>{totals.yellowCards ?? 0}</span>
@@ -589,7 +589,7 @@ const SeasonTotals = () => {
                         <div className={dashboard["card_button_and_icon"]}>
                           <span className={dashboard["icon-container"]}>
                             <svg className={[dashboard["icon--big"], dashboard["icon--primary"]].join(" ")}>
-                              <use href="/images/sprite.svg#performance"></use>
+                              <use href="/images/sprite.svg#profile"></use>
                             </svg>
                           </span>
                           <span className={dashboard["badge"]}>{totals.redCards ?? 0}</span>
@@ -603,7 +603,7 @@ const SeasonTotals = () => {
                         <div className={dashboard["card_button_and_icon"]}>
                           <span className={dashboard["icon-container"]}>
                             <svg className={[dashboard["icon--big"], dashboard["icon--primary"]].join(" ")}>
-                              <use href="/images/sprite.svg#performance"></use>
+                              <use href="/images/sprite.svg#activity"></use>
                             </svg>
                           </span>
                           <span className={dashboard["badge"]}>{totals.minutesPlayed ?? 0}</span>

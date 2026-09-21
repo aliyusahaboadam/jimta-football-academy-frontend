@@ -623,11 +623,11 @@ const ViewPlayers = () => {
                           <StyledTableCell component="th" scope="row">
                             {page * rowsPerPage + index + 1}
                           </StyledTableCell>
-                          <StyledTableCell component="th" align="left">
-                            {[row.firstname, row.surname, row.lastname]
-                              .filter(Boolean)
-                              .join(" ") || "—"}
-                          </StyledTableCell>
+                         <StyledTableCell component="th" align="left">
+  {[row.firstname, row.surname, row.lastname]
+  .filter(Boolean)
+  .join(" ") || "—"}
+</StyledTableCell>
                           <StyledTableCell align="left">
                             {row.position || "—"}
                           </StyledTableCell>

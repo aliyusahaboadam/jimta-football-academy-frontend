@@ -69,6 +69,8 @@ import TrainingDetails from "./component/training/TrainingDetails";
 import UpdateTraining from "./component/training/UpdateTraining";
 import ViewTrainings from "./component/training/ViewTrainings";
 
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import ActivityDetails from "./component/activity/ActivityDetails";
 import AddActivity from "./component/activity/AddActivity";
 import UpdateActivity from "./component/activity/UpdateActivity";
@@ -76,7 +78,8 @@ import ViewActivities from "./component/activity/ViewActivities";
 
 function App() {
   return (
-    <Router>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Router>
       <Routes>
         <Route path="/" element={<Home />} />
 
@@ -205,6 +208,8 @@ function App() {
         <Route path="/login" element={<LoginPlayer />} />
       </Routes>
     </Router>
+        </LocalizationProvider>
+   
   );
 }
 

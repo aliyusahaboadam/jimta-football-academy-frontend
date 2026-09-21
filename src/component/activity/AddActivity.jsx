@@ -14,13 +14,14 @@ import { object, string } from "yup";
 
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { Cancel, Close as CloseIcon, Delete, Menu as MenuIcon } from "@mui/icons-material";
+import { Cancel, Close as CloseIcon, Menu as MenuIcon } from "@mui/icons-material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { AppBar, Box, CssBaseline, Drawer, List, Toolbar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
 
+import { Delete } from "@mui/icons-material";
 import { saveActivity, uploadActivityPhoto } from "../../redux/reducer/activitySlice";
 import { getAllTeams } from "../../redux/reducer/teamSlice";
 import dashboard from "../style/Dashboard.module.css";

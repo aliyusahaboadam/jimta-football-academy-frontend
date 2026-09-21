@@ -62,7 +62,7 @@ const LoginAdmin = () => {
       .required("ID is required"),
 
     password: string()
-      .min(8, "Password must be at least 8 characters")
+      .min(4, "Password must be at least 4 characters")
       .required("Password is required"),
   });
 
@@ -94,28 +94,39 @@ const LoginAdmin = () => {
 
 
 
-  const handleFormSubmit = async (values, { resetForm }) => {
-    try {
-      const body = await dispatch(loginRequest(values)).unwrap();
+ const handleFormSubmit = async (values, { resetForm }) => {
+  try {
+    const body = await dispatch(loginRequest(values)).unwrap();
+    console.log("Login response body:", body);
 
-      localStorage.setItem("token", JSON.stringify(body.jwt));
+    // Accept any of the common field names the backend might use
+    const receivedToken = body?.jwt ?? body?.token ?? body?.accessToken;
 
-
-      setAlertType("success");
-        setMessage("Login Successfully")
-    //  if statement here
-    console.log(" Redirect URL" + JSON.stringify(body.redirectUrl) )
-      if (body.redirectUrl !== "error") {
-        navigate(body.redirectUrl);
-      }
-    } catch (error) {
-       setAlertType("error");
-      setMessage(error.message);
+    if (!receivedToken || typeof receivedToken !== "string") {
+      console.error("No valid JWT in login response:", body);
+      setAlertType("error");
+      setMessage("Login succeeded but no token was returned");
+      setOpen(true);
+      return;   // ← stop here, don't store garbage
     }
 
-    setOpen(true);
-    resetForm(); // This will reset the forto the initial values
-  };
+    localStorage.setItem("token", JSON.stringify(receivedToken));
+    console.log("Token stored:", localStorage.getItem("token"));
+
+    setAlertType("success");
+    setMessage("Login Successfully");
+
+    if (body.redirectUrl && body.redirectUrl !== "error") {
+      navigate(body.redirectUrl);
+    }
+  } catch (error) {
+    setAlertType("error");
+    setMessage(error?.message || "Login failed");
+  }
+
+  setOpen(true);
+  resetForm();
+};
 
   return (
     <SignInContainer>
@@ -150,7 +161,7 @@ const LoginAdmin = () => {
 
             {/* Text Fields*/}
             <TextField
-              label={"Email"}
+              label={"Player ID"}
               variant="outlined"
               fullWidth
               margin="normal"
