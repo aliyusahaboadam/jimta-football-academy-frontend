@@ -77,7 +77,7 @@ const AddPlayer = () => {
       .max(99, "Max is 99")
       .required("Jersey number is required"),
     playerNumber: number().typeError("Must be a number").nullable(),
-    nationality: string(),
+    nationality: string().max(10, "Nationality must be 10 characters or less"),
     preferredFoot: string(),
     heightCm: number().typeError("Must be a number").nullable(),
     weightKg: number().typeError("Must be a number").nullable(),
